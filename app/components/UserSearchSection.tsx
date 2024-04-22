@@ -9,18 +9,20 @@ import { getUsersByName } from "../action/searchUserName/action";
 
 export const UserSearchSection = () => {
   const [searchName, setSearchName] = useState("");
+  const [totalRowsCount, setTotalRowsCount] = useState<number | null>(null);
   const [foundUsers, setFoundUsers] = useState<User[] | null>(null);
 
   const onSubmit: FormEventHandler<HTMLFormElement> = async (event) => {
     event.preventDefault();
-    const newFoundUsers = await getUsersByName(searchName);
+    const result = await getUsersByName(searchName);
 
-    setFoundUsers(newFoundUsers);
+    setFoundUsers(result.users);
+    setTotalRowsCount(result.rowCount);
   };
 
   return (
     <>
-      {foundUsers && foundUsers.length > 10 && (
+      {totalRowsCount === 0 && (
         <div className="my-8 mx-auto max-w-4xl">
           <div className="rounded-md bg-green-50 p-4">
             <div className="flex">
